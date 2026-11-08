@@ -1,7 +1,7 @@
 export const siteConfig = {
   whatsappNumber: "2348102968799",
   phone: "+234 810 296 8799",
-  email: "hello@hairbyoma.example",
+  email: "hairbyoma925@gmail.com",
   location: "Port Harcourt, Rivers State, Nigeria",
   instagram: "@hairbyoma",
   tiktok: "@hairbyoma",
