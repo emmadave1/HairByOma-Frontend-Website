@@ -36,8 +36,7 @@ type AddressesResponse = {
 };
 
 export const addressService = {
-  list: () =>
-    apiRequest<AddressesResponse>("/addresses"),
+  list: () => apiRequest<AddressesResponse>("/addresses"),
 
   create: (payload: AddressPayload) =>
     apiRequest<AddressResponse>("/addresses", {
@@ -52,10 +51,9 @@ export const addressService = {
     }),
 
   remove: (addressId: string) =>
-    apiRequest<{ success: boolean; message: string }>(
-      `/addresses/${addressId}`,
-      { method: "DELETE" },
-    ),
+    apiRequest<{ success: boolean; message: string }>(`/addresses/${addressId}`, {
+      method: "DELETE",
+    }),
 
   setDefault: (addressId: string) =>
     apiRequest<AddressResponse>(`/addresses/${addressId}/default`, {

@@ -1,4 +1,4 @@
-import { SaleSection } from "@/components/promotions/SaleSection";
+﻿import { SaleSection } from "@/components/promotions/SaleSection";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -10,12 +10,23 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ProductCard } from "@/components/shop/ProductCard";
+import { BackendProductCard } from "@/components/shop/BackendProductCard";
 import { ReviewsSlider } from "@/components/home/ReviewsSlider";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { SectionTitle } from "@/components/shared";
-import { categories, products } from "@/data/products";
-import { reviews } from "@/data/content";
+import { useEffect, useState } from "react";
+import { productService, type BackendProduct } from "@/services/product.service";
+import { reviewService, type BackendReview } from "@/services/review.service";
+const categories = [
+  "Bone Straight",
+  "Bouncy(Vietnam and Chinese)",
+  "Deep Wave",
+  "Pixie Curls",
+  "Raw donors",
+  "Babytin",
+  "Burmese curls",
+  "Custom Wigs",
+];
 import hero from "@/assets/hairbyoma-hero.jpg";
 import deep from "@/assets/deep-wave.jpg";
 import bob from "@/assets/bob-wig.jpg";
@@ -105,48 +116,65 @@ const benefitIcons: Array<[LucideIcon, string]> = [
 ];
 const catImages = [hero, bounce, deep, bounce, hero, deep, bob, bob, bounce];
 function Home() {
+  const [products, setProducts] = useState<BackendProduct[]>([]);
+  const [reviews, setReviews] = useState<BackendReview[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProducts() {
+      try {
+        const response = await productService.list({
+          page: 1,
+          limit: 4,
+          sort: "newest",
+        });
+
+        if (!cancelled) setProducts(response.products);
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Unable to load homepage products.", error);
+        }
+      }
+    }
+
+    void loadProducts();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadReviews() {
+      try {
+        const response = await reviewService.list(1, 12);
+
+        if (!cancelled) {
+          setReviews(response.reviews);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Unable to load homepage reviews.", error);
+        }
+      }
+    }
+
+    void loadReviews();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <>
-    <OrganizationSchema />
+      <OrganizationSchema />
 
       <section className="site-container py-4 md:py-7">
-        <div className="hero-shell">
-          <div className="hero-parallax absolute inset-0" data-parallax>
-            <HeroSlider />
-          </div>
-          <div className="hero-overlay" />
-          <div className="relative z-10 flex min-h-[74svh] max-w-2xl flex-col justify-end px-5 py-10 text-background md:min-h-[76vh] md:px-12 md:py-16">
-            <p className="eyebrow text-background/80">HairbyOma · Port Harcourt</p>
-            <h1 className="mt-3 text-5xl leading-[1.02] md:text-7xl">
-              {" "}
-              Premium Human Hair Wigs <br /> Timeless Beauty.{" "}
-            </h1>
-            <p className="mt-5 max-w-lg text-base text-background/85 md:text-lg">
-              Discover premium human hair wigs, bundles and custom hairstyles crafted for beautiful
-              movement, lasting quality and effortless confidence. Shop HairbyOma in Port Harcourt,
-              Nigeria.
-            </p>
-            <div className="mt-7 flex flex-w4rap gap-3">
-              <Button magnetic asChild size="lg">
-                <Link to="/shop">
-                  Shop now <ArrowRight />
-                </Link>
-              </Button>
-              <Button magnetic asChild size="lg" variant="secondary">
-                <a href="https://wa.me/2348102968799" target="_blank" rel="noreferrer">
-                  <MessageCircle />
-                  Chat with HairbyOma
-                </a>
-              </Button>
-              <Button asChild size="lg" variant="outlineOnDark">
-                <Link to="/appointment">
-                  <CalendarDays />
-                  Book appointment
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
+        <HeroSlider />
       </section>
       <SaleSection />
       <section className="site-container py-16">
@@ -183,8 +211,8 @@ function Home() {
             }
           />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {products.slice(0, 4).map((p) => (
-              <ProductCard product={p} key={p.id} />
+            {products.map((product) => (
+              <BackendProductCard product={product} key={product._id} />
             ))}
           </div>
         </div>

@@ -166,6 +166,7 @@
     font-family: var(--font-sans);
     margin: 0;
   }
+
   h1,
   h2,
   h3,
@@ -174,6 +175,7 @@
   h6 {
     font-family: var(--font-display);
   }
+
   button,
   a,
   input,
@@ -181,10 +183,12 @@
   select {
     outline-color: var(--color-ring);
   }
+
   :focus-visible {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
   }
+
   ::selection {
     background: var(--color-secondary);
   }
@@ -194,19 +198,23 @@
   0% {
     transform: translateX(-100%);
   }
+
   50% {
     transform: translateX(100%);
   }
+
   100% {
     transform: translateX(200%);
   }
 }
+
 @keyframes pulse-soft {
   50% {
     transform: scale(1.06);
     box-shadow: 0 0 0 10px color-mix(in oklab, var(--primary) 12%, transparent);
   }
 }
+
 @keyframes fade-out {
   to {
     opacity: 0;
@@ -214,21 +222,37 @@
     pointer-events: none;
   }
 }
+
 @keyframes guide-reveal {
   from {
     opacity: 0.35;
     transform: scale(1.015);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
+
 @keyframes marker-arrive {
   from {
     opacity: 0;
     transform: translateY(-10px);
   }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-copy-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -239,6 +263,7 @@
   width: min(100% - 2rem, 78rem);
   margin-inline: auto;
 }
+
 @utility eyebrow {
   font-size: 0.72rem;
   font-weight: 700;
@@ -246,12 +271,14 @@
   letter-spacing: 0.18em;
   color: var(--color-primary);
 }
+
 @utility hero-shell {
   position: relative;
   min-height: 74svh;
   overflow: hidden;
   border-radius: var(--radius-xl);
 }
+
 @utility hero-overlay {
   position: absolute;
   inset: 0;
@@ -261,10 +288,12 @@
     color-mix(in oklab, var(--foreground) 15%, transparent) 70%
   );
 }
+
 @utility page-hero {
   background: linear-gradient(180deg, var(--color-secondary), var(--color-background));
   border-bottom: 1px solid var(--color-border);
 }
+
 @utility product-card {
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -272,17 +301,20 @@
   background: var(--color-background);
   box-shadow: 0 8px 30px color-mix(in oklab, var(--primary) 8%, transparent);
 }
+
 @utility category-card {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-lg);
 }
+
 @utility form-label {
   display: block;
   margin-bottom: 0.45rem;
   font-size: 0.8rem;
   font-weight: 600;
 }
+
 @utility upload-field {
   display: flex;
   min-height: 5rem;
@@ -294,15 +326,17 @@
   border-radius: var(--radius-lg);
   color: var(--color-muted-foreground);
   transition: 0.2s;
+
   &:hover {
     border-color: var(--color-primary);
     color: var(--color-primary);
   }
 }
+
 @utility whatsapp-float {
   position: fixed;
-  right: 1rem;
-  bottom: 1rem;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
   z-index: 45;
   display: grid;
   height: 3.25rem;
@@ -315,32 +349,40 @@
   box-shadow: 0 8px 24px color-mix(in oklab, var(--primary) 35%, transparent);
   animation: pulse-soft 2.5s ease-in-out infinite;
 }
+
 .reviews-swiper .swiper-pagination-bullet {
   background: var(--color-muted-foreground);
   opacity: 0.4;
   transition: 0.2s;
 }
+
 .reviews-swiper .swiper-pagination-bullet-active {
   background: var(--color-primary);
   opacity: 1;
 }
+
 .reviews-swiper .swiper-slide {
   height: auto;
 }
+
 .hair-colour-preview {
   animation: guide-reveal 0.45s ease-out both;
   transition: filter 0.35s ease;
 }
+
 .hair-preview-613 {
   filter: brightness(1.13) saturate(0.74);
 }
+
 .hair-preview-jet {
   filter: brightness(0.68) contrast(1.14) saturate(0.72);
 }
+
 .hair-length-marker {
   animation: marker-arrive 0.3s ease-out both;
   transition: top 0.3s ease;
 }
+
 @utility preloader {
   position: fixed;
   inset: 0;
@@ -348,6 +390,10 @@
   display: grid;
   place-items: center;
   background: var(--color-background);
+}
+
+.hero-copy-enter {
+  animation: hero-copy-arrive 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -360,26 +406,34 @@
     transition-duration: 0.01ms !important;
   }
 }
+
 @media (max-width: 640px) {
   .whatsapp-float {
-    bottom: 1.25rem;
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    height: 2.875rem;
+    width: 2.875rem;
   }
 }
 
 /* Restrained storefront motion; content stays readable without JavaScript. */
+
 @keyframes ring-rotate {
   to {
     transform: rotate(360deg);
   }
 }
+
 @keyframes count-arrive {
   from {
     transform: scale(0.8);
   }
+
   to {
     transform: scale(1);
   }
 }
+
 .loader-ring {
   width: 4rem;
   height: 4rem;
@@ -389,10 +443,12 @@
   border-radius: 50%;
   animation: ring-rotate 1.1s linear infinite;
 }
+
 .loader-ring-small {
   width: 1.6rem;
   height: 1.6rem;
 }
+
 .route-loading {
   position: fixed;
   right: 1rem;
@@ -402,9 +458,11 @@
   padding: 0.5rem;
   border-radius: 50%;
 }
+
 .cart-count {
   animation: count-arrive 0.3s ease-out;
 }
+
 .cart-feedback {
   position: fixed;
   bottom: 1.25rem;
@@ -414,6 +472,7 @@
   width: max-content;
   max-width: calc(100% - 7rem);
 }
+
 [data-motion-ready] {
   opacity: 0;
   transform: translateY(14px);
@@ -421,13 +480,16 @@
     opacity 0.65s ease,
     transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 [data-motion-ready].is-revealed {
   opacity: 1;
   transform: translateY(0);
 }
+
 .hero-parallax {
   transform: translateY(var(--parallax-offset, 0px)) scale(1.035);
 }
+
 .category-rail {
   display: grid;
   grid-auto-flow: column;
@@ -441,9 +503,11 @@
   scrollbar-width: thin;
   scrollbar-color: var(--primary) var(--muted);
 }
+
 .category-rail > a {
   scroll-snap-align: start;
 }
+
 .luxury-button {
   translate: var(--magnet-x, 0px) var(--magnet-y, 0px);
   transition:
@@ -452,37 +516,45 @@
     color 0.2s,
     box-shadow 0.25s;
 }
+
 @media (hover: hover) {
   .product-card {
     transition:
       box-shadow 0.35s,
       border-color 0.35s;
   }
+
   .product-card:hover {
     border-color: var(--primary);
     box-shadow: 0 12px 32px color-mix(in oklab, var(--primary) 12%, transparent);
   }
+
   .luxury-button:hover svg {
     transform: translateY(-1px);
     transition: transform 0.25s;
   }
 }
+
 @media (max-width: 640px) {
   .category-rail {
     grid-auto-columns: 72%;
   }
 }
+
 @media (prefers-reduced-motion: reduce) {
   [data-motion-ready] {
     opacity: 1;
     transform: none;
   }
+
   .hero-parallax {
     transform: none;
   }
+
   .luxury-button {
     translate: none;
   }
+
   .category-rail {
     scroll-behavior: auto;
   }

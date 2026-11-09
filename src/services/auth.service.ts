@@ -55,8 +55,7 @@ export const authService = {
     return response;
   },
 
-  getCurrentUser: () =>
-    apiRequest<{ success: boolean; user: AppUser }>("/users/me"),
+  getCurrentUser: () => apiRequest<{ success: boolean; user: AppUser }>("/users/me"),
 
   logout: async () => {
     try {

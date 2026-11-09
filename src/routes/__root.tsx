@@ -1,7 +1,4 @@
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -15,30 +12,23 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { AuthProvider } from "@/context/auth";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFound() {
   return (
     <div className="site-container py-24 text-center">
       <h1 className="text-6xl">404</h1>
 
-      <p className="mt-4 text-muted-foreground">
-        This page could not be found.
-      </p>
+      <p className="mt-4 text-muted-foreground">This page could not be found.</p>
 
-      <Link
-        to="/"
-        className="mt-6 inline-block text-primary"
-      >
+      <Link to="/" className="mt-6 inline-block text-primary">
         Return home
       </Link>
     </div>
   );
 }
 
-function ErrorView({
-  error,
-  reset,
-}: import("@tanstack/react-router").ErrorComponentProps) {
+function ErrorView({ error, reset }: import("@tanstack/react-router").ErrorComponentProps) {
   const router = useRouter();
 
   useEffect(() => {
@@ -49,9 +39,7 @@ function ErrorView({
     <div className="site-container py-24 text-center">
       <h1 className="text-4xl">This page didn't load</h1>
 
-      <p className="mt-4 text-muted-foreground">
-        Something went wrong. Please try again.
-      </p>
+      <p className="mt-4 text-muted-foreground">Something went wrong. Please try again.</p>
 
       <button
         className="mt-5 text-primary"
@@ -140,6 +128,7 @@ function Root() {
         <SiteLayout>
           <Outlet />
         </SiteLayout>
+        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -24,6 +24,7 @@ import {
   CartFeedback,
   StorefrontMotion,
 } from "@/components/motion/StorefrontMotion";
+
 const nav = [
   ["Home", "/"],
   ["Shop", "/shop"],
@@ -35,6 +36,7 @@ const nav = [
   ["How to Order", "/how-to-order"],
   ["Contact", "/contact"],
 ] as const;
+
 function Chrome({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const pageKey = useRouterState({ select: (s) => s.location.pathname });
@@ -42,27 +44,27 @@ function Chrome({ children }: { children: ReactNode }) {
   const { user, signOut } = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
   async function handleSignOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await signOut();
     await navigate({ to: "/auth", replace: true });
   }
+
   return (
     <>
-      {/* <div className="bg-foreground px-4 py-2 text-center text-xs font-medium text-background">
-        Complimentary consultation on every luxury hair selection · Frontend preview
-      </div> */}
       <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
-        <div className="site-container flex h-18 items-center justify-between gap-3">
-          <Link to="/" className="shrink-0">
+        <div className="site-container grid h-18 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:justify-between sm:gap-3">
+          <Link to="/" className="min-w-0 shrink-0">
             <img
               src="/logo.png"
               alt="HairbyOma Luxury Hair Studio"
               className="h-16 w-auto object-contain"
             />
           </Link>
-          <nav className="hidden items-center gap-5 xl:flex">
+
+          <nav className="hidden items-center gap-5 2xl:flex">
             {nav.map(([label, to]) => (
               <Link
                 key={to}
@@ -74,12 +76,14 @@ function Chrome({ children }: { children: ReactNode }) {
               </Link>
             ))}
           </nav>
-          <div className="flex items-center gap-1">
+
+          <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
             <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex">
               <Link to="/shop" search={{ q: "" }} aria-label="Search">
                 <Search />
               </Link>
             </Button>
+
             <Button asChild variant="ghost" size="icon">
               {user ? (
                 <Link
@@ -100,12 +104,14 @@ function Chrome({ children }: { children: ReactNode }) {
                 </Link>
               )}
             </Button>
+
             <Button asChild variant="ghost" size="icon">
               <Link to="/cart" aria-label={`Cart with ${cartCount} items`} className="relative">
                 <ShoppingCart />
                 <Count key={cartCount} n={cartCount} />
               </Link>
             </Button>
+
             <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex">
               {user ? (
                 <Link to="/account" aria-label="Customer account">
@@ -117,6 +123,7 @@ function Chrome({ children }: { children: ReactNode }) {
                 </Link>
               )}
             </Button>
+
             {user && (
               <Button
                 variant="ghost"
@@ -128,31 +135,36 @@ function Chrome({ children }: { children: ReactNode }) {
                 <LogOut />
               </Button>
             )}
+
             <Button asChild variant="outline" className="hidden lg:inline-flex">
               <Link to="/appointment">
                 <CalendarDays />
                 Book
               </Link>
             </Button>
+
             <Button asChild className="hidden lg:inline-flex">
               <Link to="/shop">
                 <ShoppingCart />
                 Shop now
               </Link>
             </Button>
+
             <Button
               variant="ghost"
               size="icon"
-              className="xl:hidden"
+              className="shrink-0 2xl:hidden"
               onClick={() => setOpen(!open)}
-              aria-label="Open navigation"
+              aria-label={open ? "Close navigation" : "Open navigation"}
+              aria-expanded={open}
             >
               {open ? <X /> : <Menu />}
             </Button>
           </div>
         </div>
+
         {open && (
-          <nav className="site-container grid gap-1 border-t py-4 xl:hidden">
+          <nav className="site-container grid gap-1 border-t py-4 2xl:hidden">
             {nav.map(([label, to]) => (
               <Link
                 key={to}
@@ -163,6 +175,7 @@ function Chrome({ children }: { children: ReactNode }) {
                 {label}
               </Link>
             ))}
+
             {user ? (
               <>
                 <Link
@@ -172,6 +185,7 @@ function Chrome({ children }: { children: ReactNode }) {
                 >
                   My account
                 </Link>
+
                 <Button
                   variant="ghost"
                   onClick={() => {
@@ -192,6 +206,7 @@ function Chrome({ children }: { children: ReactNode }) {
                 Sign in
               </Link>
             )}
+
             <div className="mt-2 grid grid-cols-2 gap-2">
               <Button asChild variant="outline">
                 <Link to="/appointment">
@@ -199,6 +214,7 @@ function Chrome({ children }: { children: ReactNode }) {
                   Appointment
                 </Link>
               </Button>
+
               <Button asChild>
                 <a
                   href={`https://wa.me/${siteConfig.whatsappNumber}`}
@@ -213,11 +229,15 @@ function Chrome({ children }: { children: ReactNode }) {
           </nav>
         )}
       </header>
+
       <main>
         <StorefrontMotion pageKey={pageKey}>{children}</StorefrontMotion>
       </main>
+
       <CartFeedback />
+
       <Footer />
+
       <a
         href={`https://wa.me/${siteConfig.whatsappNumber}`}
         target="_blank"
@@ -231,6 +251,7 @@ function Chrome({ children }: { children: ReactNode }) {
     </>
   );
 }
+
 function Count({ n }: { n: number }) {
   return n ? (
     <span className="absolute -right-1 -top-1 grid size-4 place-items-center rounded-full bg-primary text-[10px] text-primary-foreground cart-count">
@@ -238,6 +259,7 @@ function Count({ n }: { n: number }) {
     </span>
   ) : null;
 }
+
 function Footer() {
   return (
     <footer className="border-t bg-foreground text-background">
@@ -248,6 +270,7 @@ function Footer() {
             Luxury Hair. Timeless Beauty. Carefully considered hair experiences from Port Harcourt.
           </p>
         </div>
+
         <FooterLinks
           title="Discover"
           links={[
@@ -257,6 +280,7 @@ function Footer() {
             ["Length & colour guide", "/guides"],
           ]}
         />
+
         <FooterLinks
           title="Customer care"
           links={[
@@ -266,22 +290,27 @@ function Footer() {
             ["FAQ", "/faq"],
           ]}
         />
+
         <div>
           <h3 className="font-display text-xl">Visit & connect</h3>
+
           <p className="mt-4 flex gap-2 text-sm text-background/70">
             <MapPin className="size-4 shrink-0" />
             {siteConfig.location}
           </p>
+
           <p className="mt-3 flex gap-2 text-sm text-background/70">
             <Phone className="size-4" />
             {siteConfig.phone}
           </p>
+
           <p className="mt-3 flex gap-2 text-sm text-background/70">
             <Instagram className="size-4" />
             {siteConfig.instagram}
           </p>
         </div>
       </div>
+
       <div className="border-t border-background/10">
         <div className="site-container flex flex-wrap justify-between gap-3 py-5 text-xs text-background/60">
           <span>© 2026 HairbyOma.</span>
@@ -291,6 +320,7 @@ function Footer() {
     </footer>
   );
 }
+
 function FooterLinks({
   title,
   links,
@@ -301,40 +331,55 @@ function FooterLinks({
   return (
     <div>
       <h3 className="font-display text-xl">{title}</h3>
+
       <div className="mt-4 grid gap-2">
-        {links.map(([l, t]) => (
+        {links.map(([label, to]) => (
           <Link
-            key={t}
-            to={t as never}
+            key={to}
+            to={to as never}
             className="text-sm text-background/70 hover:text-background"
           >
-            {l}
+            {label}
           </Link>
         ))}
       </div>
     </div>
   );
 }
+
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
-  const pending = useRouterState({ select: (s) => s.status === "pending" });
+  const pending = useRouterState({
+    select: (s) => s.status === "pending",
+  });
+
   useEffect(() => {
     let disposed = false;
+
     const min = new Promise<void>((resolve) => setTimeout(resolve, 650));
+
     const loaded = new Promise<void>((resolve) => {
-      if (document.readyState === "complete") resolve();
-      else window.addEventListener("load", () => resolve(), { once: true });
+      if (document.readyState === "complete") {
+        resolve();
+      } else {
+        window.addEventListener("load", () => resolve(), {
+          once: true,
+        });
+      }
     });
+
     Promise.race([
       Promise.all([min, loaded]),
       new Promise((resolve) => setTimeout(resolve, 2500)),
     ]).then(() => {
       if (!disposed) setLoading(false);
     });
+
     return () => {
       disposed = true;
     };
   }, []);
+
   return (
     <StoreProvider>
       {loading && (
@@ -346,11 +391,13 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
       )}
+
       {!loading && pending && (
         <div className="route-loading" role="status" aria-label="Loading page">
           <div className="loader-ring loader-ring-small" />
         </div>
       )}
+
       <Chrome>{children}</Chrome>
     </StoreProvider>
   );

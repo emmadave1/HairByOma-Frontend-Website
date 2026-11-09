@@ -1,13 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import {
-  MapPin,
-  Plus,
-  Pencil,
-  Trash2,
-  Star,
-  Loader2,
-  CheckCircle2,
-} from "lucide-react";
+import { MapPin, Plus, Pencil, Trash2, Star, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,11 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  addressService,
-  type AddressPayload,
-  type SavedAddress,
-} from "@/services/address.service";
+import { addressService, type AddressPayload, type SavedAddress } from "@/services/address.service";
 
 const emptyForm: AddressPayload = {
   fullName: "",
@@ -66,11 +54,7 @@ export function AddressManager() {
       const response = await addressService.list();
       setAddresses(response.addresses);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Unable to load your saved addresses.",
-      );
+      setError(err instanceof Error ? err.message : "Unable to load your saved addresses.");
     } finally {
       setLoading(false);
     }
@@ -123,7 +107,7 @@ export function AddressManager() {
       city: form.city.trim(),
       state: form.state.trim(),
       additionalInfo: form.additionalInfo?.trim() ?? "",
-      isDefault: form.isDefault,
+      isDefault: form.isDefault ?? false,
     };
 
     if (
@@ -148,9 +132,7 @@ export function AddressManager() {
       setDialogOpen(false);
       await loadAddresses();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to save this address.",
-      );
+      setError(err instanceof Error ? err.message : "Unable to save this address.");
     } finally {
       setSaving(false);
     }
@@ -166,9 +148,7 @@ export function AddressManager() {
       setSuccess(response.message);
       await loadAddresses();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to update the default address.",
-      );
+      setError(err instanceof Error ? err.message : "Unable to update the default address.");
     } finally {
       setActionId(null);
     }
@@ -188,9 +168,7 @@ export function AddressManager() {
       setDeletingAddress(null);
       await loadAddresses();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to delete this address.",
-      );
+      setError(err instanceof Error ? err.message : "Unable to delete this address.");
     } finally {
       setActionId(null);
     }
@@ -207,11 +185,7 @@ export function AddressManager() {
           </p>
         </div>
 
-        <Button
-          type="button"
-          onClick={openAddDialog}
-          disabled={addresses.length >= 10 || loading}
-        >
+        <Button type="button" onClick={openAddDialog} disabled={addresses.length >= 10 || loading}>
           <Plus className="mr-2 h-4 w-4" />
           Add address
         </Button>
@@ -219,9 +193,7 @@ export function AddressManager() {
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
         <span>{addresses.length} of 10 saved addresses</span>
-        {addresses.length >= 10 && (
-          <span>You have reached the address limit.</span>
-        )}
+        {addresses.length >= 10 && <span>You have reached the address limit.</span>}
       </div>
 
       {error && !dialogOpen && (
@@ -259,9 +231,7 @@ export function AddressManager() {
           {addresses.map((address) => (
             <article
               key={address._id}
-              className={`border p-5 ${
-                address.isDefault ? "border-primary" : ""
-              }`}
+              className={`border p-5 ${address.isDefault ? "border-primary" : ""}`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
@@ -282,17 +252,11 @@ export function AddressManager() {
                 <p>
                   {address.city}, {address.state}
                 </p>
-                {address.additionalInfo && (
-                  <p className="pt-1">{address.additionalInfo}</p>
-                )}
+                {address.additionalInfo && <p className="pt-1">{address.additionalInfo}</p>}
               </div>
 
               <div className="mt-5 flex flex-wrap gap-2 border-t pt-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => openEditDialog(address)}
-                >
+                <Button variant="outline" size="sm" onClick={() => openEditDialog(address)}>
                   <Pencil className="mr-1 h-3 w-3" />
                   Edit
                 </Button>
@@ -481,9 +445,7 @@ export function AddressManager() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={Boolean(actionId)}>
-              Cancel
-            </AlertDialogCancel>
+            <AlertDialogCancel disabled={Boolean(actionId)}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               disabled={Boolean(actionId)}
               onClick={(event) => {
