@@ -33,6 +33,16 @@ import {
 
 import { Button } from "@/components/ui/button";
 import ProductsManagement from "@/components/admin/products-management";
+import OrdersManagement from "@/components/admin/orders-management";
+import CustomersManagement from "@/components/admin/customers-management";
+import ReviewsManagement from "@/components/admin/reviews-management";
+import GalleryManagement from "@/components/admin/gallery-management";
+import RewardsManagement from "@/components/admin/rewards-management";
+import BirthdaysManagement from "@/components/admin/birthdays-management";
+import ReferralsManagement from "@/components/admin/referrals-management";
+import PromotionsManagement from "@/components/admin/promotions-management";
+import SettingsManagement from "@/components/admin/settings-management";
+import CustomWigOrdersManagement from "@/components/admin/custom-wig-orders-management";
 import { useAuth } from "@/context/auth";
 import {
   adminDashboardService,
@@ -201,6 +211,26 @@ function Page() {
               />
             ) : tab === "Products" ? (
               <ProductsManagement />
+            ) : tab === "Orders" ? (
+              <OrdersManagement />
+            ) : tab === "Customers" ? (
+              <CustomersManagement />
+            ) : tab === "Custom orders" ? (
+              <CustomWigOrdersManagement />
+            ) : tab === "Reviews" ? (
+              <ReviewsManagement />
+            ) : tab === "Gallery" ? (
+              <GalleryManagement />
+            ) : tab === "Rewards" ? (
+              <RewardsManagement />
+            ) : tab === "Birthdays" ? (
+              <BirthdaysManagement />
+            ) : tab === "Referrals" ? (
+              <ReferralsManagement />
+            ) : tab === "Promotions" ? (
+              <PromotionsManagement />
+            ) : tab === "Settings" ? (
+              <SettingsManagement />
             ) : (
               <ModulePlaceholder title={tab} />
             )}
@@ -439,7 +469,7 @@ function Overview({
           value={
             primaryCurrency
               ? formatCurrency(primaryCurrency.netCollected, primaryCurrency.currency)
-              : "�"
+              : "—"
           }
           detail={
             primaryCurrency ? `${primaryCurrency.paidOrders} paid orders` : "No revenue recorded"

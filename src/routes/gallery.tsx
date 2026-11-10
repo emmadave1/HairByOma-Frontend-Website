@@ -13,7 +13,7 @@ import {
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
-      { title: "HairbyOma Gallery � Hair & Client Looks" },
+      { title: "HairbyOma Gallery | Hair & Client Looks" },
       {
         name: "description",
         content: "Explore HairbyOma wigs, installations, client looks and hair transformations.",
@@ -277,7 +277,7 @@ function Page() {
 
               <div className="mb-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                 <span>{categoryLabels[active.category]}</span>
-                <span>�</span>
+                <span>•</span>
                 <span>{formatDate(active.createdAt)}</span>
               </div>
 

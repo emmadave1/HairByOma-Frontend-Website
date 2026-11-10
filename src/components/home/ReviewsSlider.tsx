@@ -15,6 +15,8 @@ export function ReviewsSlider({ reviews }: { reviews: BackendReview[] }) {
     const root = rootRef.current;
     if (!root || reviews.length === 0) return;
 
+    const paginationEl = root.querySelector<HTMLElement>(".reviews-dots");
+
     const swiper = new Swiper(root, {
       modules: [Autoplay, Keyboard, Navigation, Pagination],
       rewind: true,
@@ -25,7 +27,7 @@ export function ReviewsSlider({ reviews }: { reviews: BackendReview[] }) {
         ? false
         : { delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true },
       navigation: { prevEl: prevRef.current, nextEl: nextRef.current },
-      pagination: { el: root.querySelector(".reviews-dots"), clickable: true },
+      pagination: { el: paginationEl, clickable: true },
       keyboard: { enabled: true },
       breakpoints: {
         640: { slidesPerView: 2 },
@@ -103,7 +105,7 @@ export function ReviewsSlider({ reviews }: { reviews: BackendReview[] }) {
                     <strong>{review.reviewer}</strong>
                     <p className="text-xs text-muted-foreground">
                       {review.product?.name ?? "HairbyOma product"}
-                      {" � Verified purchase"}
+                      {" • Verified purchase"}
                     </p>
                   </div>
                 </article>

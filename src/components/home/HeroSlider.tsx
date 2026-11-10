@@ -5,7 +5,7 @@ import {
   ArrowRight,
   CalendarDays,
   MessageCircle,
-  Pause,
+  // Pause,
   Play,
   ShoppingBag,
 } from "lucide-react";
@@ -296,7 +296,7 @@ export function HeroSlider() {
             }
             aria-pressed={userPaused}
           >
-            {userPaused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
+            {/* {userPaused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />} */}
           </Button>
         </div>
       </div>

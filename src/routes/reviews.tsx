@@ -41,12 +41,12 @@ const ALLOWED_TYPES = [
 export const Route = createFileRoute("/reviews")({
   head: () => ({
     meta: [
-      { title: "Customer Reviews � HairbyOma" },
+      { title: "Customer Reviews - HairbyOma" },
       {
         name: "description",
         content: "Read customer experiences and verified product reviews from HairbyOma.",
       },
-      { property: "og:title", content: "Customer Reviews � HairbyOma" },
+      { property: "og:title", content: "Customer Reviews - HairbyOma" },
       {
         property: "og:description",
         content: "Real customer experiences and product reviews from HairbyOma.",

@@ -13,7 +13,7 @@ export const Route = createFileRoute("/cart")({
     meta: [
       { title: "Your Cart - HairbyOma" },
       { name: "description", content: "Review your selected HairbyOma products and options." },
-      { property: "og:title", content: "Your Cart � HairbyOma" },
+      { property: "og:title", content: "Your Cart - HairbyOma" },
       { property: "og:description", content: "Review your HairbyOma selection." },
     ],
   }),

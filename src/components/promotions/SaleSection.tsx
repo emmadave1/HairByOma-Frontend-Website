@@ -35,9 +35,7 @@ export function SaleSection() {
         }
       } catch (error) {
         if (active) {
-          setProductsError(
-            error instanceof Error ? error.message : "Unable to load products.",
-          );
+          setProductsError(error instanceof Error ? error.message : "Unable to load products.");
         }
       } finally {
         if (active) setLoadingProducts(false);
@@ -54,9 +52,7 @@ export function SaleSection() {
   if (!siteConfig.promo.enabled) return null;
 
   const countdown =
-    now === null
-      ? null
-      : getSaleCountdown(now, siteConfig.promo.startsAt, siteConfig.promo.endsAt);
+    now === null ? null : getSaleCountdown(now, siteConfig.promo.startsAt, siteConfig.promo.endsAt);
 
   const phase = countdown?.phase;
 
@@ -69,9 +65,7 @@ export function SaleSection() {
         <div>
           <p className="eyebrow">30 November - 16 December 2026</p>
 
-          <h2 className="mt-3 text-4xl md:text-5xl">
-            {siteConfig.promo.label}
-          </h2>
+          <h2 className="mt-3 text-4xl md:text-5xl">{siteConfig.promo.label}</h2>
 
           <p className="mt-4 max-w-lg text-muted-foreground">
             {phase === "ended"
@@ -108,17 +102,13 @@ export function SaleSection() {
               className="grid grid-cols-4 divide-x divide-border"
               role="timer"
               aria-label={
-                phase === "active"
-                  ? "Time until the sale ends"
-                  : "Time until the sale starts"
+                phase === "active" ? "Time until the sale ends" : "Time until the sale starts"
               }
             >
               {(["days", "hours", "minutes", "seconds"] as const).map((unit) => (
                 <div key={unit} className="min-w-0 text-center">
                   <span className="block font-display text-3xl tabular-nums sm:text-5xl">
-                    {countdown
-                      ? String(countdown[unit]).padStart(2, "0")
-                      : "--"}
+                    {countdown ? String(countdown[unit]).padStart(2, "0") : "--"}
                   </span>
 
                   <span className="mt-3 block text-[10px] uppercase text-muted-foreground sm:text-xs">
@@ -150,19 +140,12 @@ export function SaleSection() {
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {loadingProducts ? (
-              <p className="col-span-full text-center text-muted-foreground">
-                Loading products...
-              </p>
+              <p className="col-span-full text-center text-muted-foreground">Loading products...</p>
             ) : productsError ? (
-              <p className="col-span-full text-center text-destructive">
-                {productsError}
-              </p>
+              <p className="col-span-full text-center text-destructive">{productsError}</p>
             ) : saleProducts.length ? (
               saleProducts.map((product) => (
-                <BackendProductCard
-                  key={product._id}
-                  product={product}
-                />
+                <BackendProductCard key={product._id} product={product} />
               ))
             ) : (
               <p className="col-span-full text-center text-muted-foreground">

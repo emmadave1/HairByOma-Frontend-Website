@@ -104,6 +104,8 @@ function ProductsManagement() {
   const [history, setHistory] = useState<InventoryAdjustment[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [historyType, setHistoryType] = useState<"all" | InventoryAdjustmentType>("all");
+  const [historyProductId, setHistoryProductId] = useState("all");
+  const [historyProducts, setHistoryProducts] = useState<BackendProduct[]>([]);
   const [historyPage, setHistoryPage] = useState(1);
   const [historyPages, setHistoryPages] = useState(1);
 
@@ -176,11 +178,42 @@ function ProductsManagement() {
     }
   }, [inventorySearch, inventoryStatus, inventoryPage]);
 
+  const loadHistoryProducts = useCallback(async () => {
+    try {
+      const firstPage = await adminProductService.list({
+        status: "all",
+        page: 1,
+        limit: 50,
+        sort: "newest",
+      });
+
+      const remainingPages = await Promise.all(
+        Array.from({ length: Math.max(0, firstPage.totalPages - 1) }, (_, index) =>
+          adminProductService.list({
+            status: "all",
+            page: index + 2,
+            limit: 50,
+            sort: "newest",
+          }),
+        ),
+      );
+
+      setHistoryProducts([
+        ...firstPage.products,
+        ...remainingPages.flatMap((response) => response.products),
+      ]);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to load products for history filter.",
+      );
+    }
+  }, []);
   const loadHistory = useCallback(async () => {
     setLoadingHistory(true);
 
     try {
       const response = await inventoryService.getHistory({
+        ...(historyProductId !== "all" ? { productId: historyProductId } : {}),
         ...(historyType !== "all" ? { adjustmentType: historyType } : {}),
         page: historyPage,
         limit: PAGE_SIZE,
@@ -193,7 +226,11 @@ function ProductsManagement() {
     } finally {
       setLoadingHistory(false);
     }
-  }, [historyType, historyPage]);
+  }, [historyType, historyProductId, historyPage]);
+
+  useEffect(() => {
+    void loadHistoryProducts();
+  }, [loadHistoryProducts]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -202,6 +239,10 @@ function ProductsManagement() {
 
     return () => window.clearTimeout(timer);
   }, [loadProducts]);
+
+  useEffect(() => {
+    void loadHistoryProducts();
+  }, [loadHistoryProducts]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -417,7 +458,11 @@ function ProductsManagement() {
                         {formatCurrency(product.price)}
                       </TableCell>
 
-                      <TableCell>{product.stock}</TableCell>
+                      <TableCell>
+                        {product.variants.length > 0
+                          ? product.variants.reduce((total, variant) => total + variant.stock, 0)
+                          : product.stock}
+                      </TableCell>
 
                       <TableCell>
                         <Badge variant={product.isActive ? "default" : "secondary"}>
@@ -578,7 +623,7 @@ function ProductsManagement() {
 
                         <TableCell className="font-semibold">{item.inventoryStock}</TableCell>
 
-                        <TableCell>{item.variants.length}</TableCell>
+                        <TableCell>{(item.variants ?? []).length}</TableCell>
 
                         <TableCell>
                           <Badge variant={status === "In stock" ? "default" : "destructive"}>
@@ -638,24 +683,45 @@ function ProductsManagement() {
               </p>
             </div>
 
-            <Select
-              value={historyType}
-              onValueChange={(value) => {
-                setHistoryType(value as "all" | InventoryAdjustmentType);
-                setHistoryPage(1);
-              }}
-            >
-              <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="Adjustment type" />
-              </SelectTrigger>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Select
+                value={historyProductId}
+                onValueChange={(value) => {
+                  setHistoryProductId(value);
+                  setHistoryPage(1);
+                }}
+              >
+                <SelectTrigger className="w-full sm:w-56">
+                  <SelectValue placeholder="Filter by product" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All products</SelectItem>
+                  {historyProducts.map((product) => (
+                    <SelectItem key={product._id} value={product._id}>
+                      {product.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select
+                value={historyType}
+                onValueChange={(value) => {
+                  setHistoryType(value as "all" | InventoryAdjustmentType);
+                  setHistoryPage(1);
+                }}
+              >
+                <SelectTrigger className="w-full sm:w-48">
+                  <SelectValue placeholder="Adjustment type" />
+                </SelectTrigger>
 
-              <SelectContent>
-                <SelectItem value="all">All adjustments</SelectItem>
-                <SelectItem value="INCREASE">Increases</SelectItem>
-                <SelectItem value="DECREASE">Decreases</SelectItem>
-                <SelectItem value="SET">Stock resets</SelectItem>
-              </SelectContent>
-            </Select>
+                <SelectContent>
+                  <SelectItem value="all">All adjustments</SelectItem>
+                  <SelectItem value="INCREASE">Increases</SelectItem>
+                  <SelectItem value="DECREASE">Decreases</SelectItem>
+                  <SelectItem value="SET">Stock resets</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="overflow-hidden rounded-lg border">

@@ -42,7 +42,7 @@ function AdjustStockDialog({ open, product, onOpenChange, onSuccess }: AdjustSto
   const [reason, setReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const selectedVariant = product?.variants.find((variant) => variant._id === variantId);
+  const selectedVariant = product?.variants?.find((variant) => variant._id === variantId);
 
   const currentStock = selectedVariant?.stock ?? product?.stock ?? 0;
 
@@ -71,7 +71,7 @@ function AdjustStockDialog({ open, product, onOpenChange, onSuccess }: AdjustSto
       return;
     }
 
-    if (product.variants.length > 0 && !variantId) {
+    if ((product.variants ?? []).length > 0 && !variantId) {
       toast.error("Please select a product variant.");
       return;
     }
@@ -85,7 +85,7 @@ function AdjustStockDialog({ open, product, onOpenChange, onSuccess }: AdjustSto
 
     try {
       await inventoryService.adjustStock(product._id, {
-        ...(product.variants.length > 0 ? { variantId } : {}),
+        ...((product.variants ?? []).length > 0 ? { variantId } : {}),
         adjustmentType,
         quantity: parsedQuantity,
         reason: reason.trim(),
@@ -129,14 +129,14 @@ function AdjustStockDialog({ open, product, onOpenChange, onSuccess }: AdjustSto
             <p className="mt-3 text-sm text-muted-foreground">
               Current stock:{" "}
               <span className="font-semibold text-foreground">
-                {product.variants.length > 0 && !variantId
+                {(product.variants ?? []).length > 0 && !variantId
                   ? "Select a variant"
                   : `${currentStock} units`}
               </span>
             </p>
           </div>
 
-          {product.variants.length > 0 && (
+          {(product.variants ?? []).length > 0 && (
             <div className="space-y-2">
               <Label>Product variant</Label>
 
@@ -146,7 +146,7 @@ function AdjustStockDialog({ open, product, onOpenChange, onSuccess }: AdjustSto
                 </SelectTrigger>
 
                 <SelectContent>
-                  {product.variants.map((variant) => (
+                  {(product.variants ?? []).map((variant) => (
                     <SelectItem key={variant._id} value={variant._id}>
                       {variant.length} inches · {variant.texture} · {variant.colour} (
                       {variant.stock} units)
@@ -233,7 +233,7 @@ function AdjustStockDialog({ open, product, onOpenChange, onSuccess }: AdjustSto
                 submitting ||
                 !quantity ||
                 !reason.trim() ||
-                (product.variants.length > 0 && !variantId)
+                ((product.variants ?? []).length > 0 && !variantId)
               }
             >
               {submitting && <Loader2 className="mr-2 size-4 animate-spin" />}
