@@ -89,7 +89,7 @@ export function DashboardOverview() {
     },
     {
       label: "Reward points",
-      value: pointsLoading ? null : points === null ? "�" : points.toLocaleString("en-NG"),
+      value: pointsLoading ? null : points === null ? "Unavailable" : points.toLocaleString("en-NG"),
       description: "Your loyalty balance",
       icon: Gift,
       to: "/rewards" as const,
@@ -226,11 +226,10 @@ export function DashboardOverview() {
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-primary">{order.orderNumber}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {order.items.length} item{order.items.length === 1 ? "" : "s"} �{" "}
-                    {formatDate(order.createdAt)}
+                    {order.items.length} item{order.items.length === 1 ? "" : "s"} • {formatDate(order.createdAt)}
                   </p>
                   <p className="mt-1 truncate text-xs text-muted-foreground">
-                    {order.items.map((item) => `${item.productName} � ${item.quantity}`).join(", ")}
+                    {order.items.map((item) => `${item.productName} • ${item.quantity}`).join(", ")}
                   </p>
                 </div>
 

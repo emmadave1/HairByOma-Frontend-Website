@@ -259,7 +259,7 @@ export function CustomerDashboardLayout({ children }: { children: ReactNode }) {
         <footer className="border-t border-border bg-background px-5 py-6 text-center text-xs text-muted-foreground md:px-8">
           <div className="flex items-center justify-center gap-2">
             <ShoppingBag className="h-3.5 w-3.5" />
-            <span>HairbyOma � Your beauty, your way.</span>
+            <span>HairbyOma • Your beauty, your way.</span>
           </div>
         </footer>
       </div>

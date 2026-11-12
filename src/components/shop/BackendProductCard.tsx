@@ -42,8 +42,8 @@ export function BackendProductCard({
 
   const priceLabel =
     lowestPrice === highestPrice
-      ? `?${lowestPrice.toLocaleString()}`
-      : `?${lowestPrice.toLocaleString()} - ?${highestPrice.toLocaleString()}`;
+      ? `₦${lowestPrice.toLocaleString()}`
+      : `₦${lowestPrice.toLocaleString()} - ?${highestPrice.toLocaleString()}`;
 
   function save() {
     if (!user) {
@@ -136,7 +136,7 @@ export function BackendProductCard({
             <p className="font-semibold">{priceLabel}</p>
             <p className="text-[11px] text-muted-foreground">
               {availableStock > 0
-                ? `${availableStock} in stock`
+                ? `₦${availableStock} in stock`
                 : "Out of stock"}
             </p>
           </div>
@@ -146,7 +146,7 @@ export function BackendProductCard({
             variant="outline"
             onClick={viewProduct}
             disabled={availableStock <= 0}
-            aria-label={`View ${product.name} options`}
+            aria-label={`View ₦${product.name} options`}
           >
             <ShoppingCart />
           </Button>

@@ -92,7 +92,7 @@ function Page() {
             <h2 className="mt-2 text-3xl">
               {ordersLoading
                 ? "Loading..."
-                : `?${yearlySpent.toLocaleString("en-NG")} purchased`}
+                : `₦${yearlySpent.toLocaleString("en-NG")} purchased`}
             </h2>
 
             <div className="mt-6">
@@ -117,11 +117,11 @@ function Page() {
             <p className="mt-2 text-2xl font-display">
               {ordersLoading
                 ? "Loading..."
-                : `?${remainingAmount.toLocaleString("en-NG")}`}
+                : `₦${remainingAmount.toLocaleString("en-NG")}`}
             </p>
 
             <p className="mt-4 text-sm">
-              Annual target: ?{annualTarget.toLocaleString("en-NG")}
+              Annual target: ₦{annualTarget.toLocaleString("en-NG")}
             </p>
           </div>
         </div>

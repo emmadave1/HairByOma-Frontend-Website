@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+﻿import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   Heart,
@@ -40,7 +40,7 @@ const nav = [
 function Chrome({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const pageKey = useRouterState({ select: (s) => s.location.pathname });
-  const { cartCount, wishlist } = useStore();
+  const { cartCount } = useStore();
   const { user, signOut } = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ function Chrome({ children }: { children: ReactNode }) {
     await queryClient.cancelQueries();
     queryClient.clear();
     await signOut();
-    await navigate({ to: "/auth", replace: true });
+    await navigate({ to: "/", replace: true });
   }
 
   return (
@@ -78,31 +78,8 @@ function Chrome({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
-            <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex">
-              <Link to="/shop" search={{ q: "" }} aria-label="Search">
-                <Search />
-              </Link>
-            </Button>
-
-            <Button asChild variant="ghost" size="icon">
-              {user ? (
-                <Link
-                  to="/wishlist"
-                  aria-label={`Wishlist with ${wishlist.length} items`}
-                  className="relative"
-                >
-                  <Heart />
-                  <Count n={wishlist.length} />
-                </Link>
-              ) : (
-                <Link
-                  to="/auth"
-                  search={{ next: "/wishlist" }}
-                  aria-label="Sign in to view wishlist"
-                >
-                  <Heart />
-                </Link>
-              )}
+            <Button asChild variant="outline" className="h-9 px-4 text-sm">
+              {user ? <Link to="/account">My Account</Link> : <Link to="/auth">Login</Link>}
             </Button>
 
             <Button asChild variant="ghost" size="icon">
@@ -112,19 +89,7 @@ function Chrome({ children }: { children: ReactNode }) {
               </Link>
             </Button>
 
-            <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex">
-              {user ? (
-                <Link to="/account" aria-label="Customer account">
-                  <UserRound />
-                </Link>
-              ) : (
-                <Link to="/auth" search={{ next: "/account" }} aria-label="Sign in">
-                  <UserRound />
-                </Link>
-              )}
-            </Button>
-
-            {user && (
+            {/* {user && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -134,7 +99,7 @@ function Chrome({ children }: { children: ReactNode }) {
               >
                 <LogOut />
               </Button>
-            )}
+            )} */}
 
             <Button asChild variant="outline" className="hidden lg:inline-flex">
               <Link to="/appointment">
@@ -178,13 +143,13 @@ function Chrome({ children }: { children: ReactNode }) {
 
             {user ? (
               <>
-                <Link
+                {/* <Link
                   to="/account"
                   onClick={() => setOpen(false)}
                   className="rounded-lg px-3 py-3 text-sm font-medium hover:bg-muted"
                 >
                   My account
-                </Link>
+                </Link> */}
 
                 <Button
                   variant="ghost"
@@ -416,6 +381,3 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     </StoreProvider>
   );
 }
-
-
-

@@ -180,8 +180,8 @@ function OrdersPage() {
                       <p className="font-medium text-primary">{item.productName}</p>
                       <p className="mt-1 text-xs text-muted-foreground">
                         Quantity: {item.quantity}
-                        {item.length ? ` � ${item.length}` : ""}
-                        {item.texture ? ` � ${item.texture}` : ""}
+                        {item.length ? ` • ${item.length}` : ""}
+                        {item.texture ? ` • ${item.texture}` : ""}
                       </p>
                     </div>
                     <p className="shrink-0 text-sm font-medium text-primary">
