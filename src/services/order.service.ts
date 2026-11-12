@@ -135,3 +135,31 @@ export const adminOrderService = {
       body: { refundNote },
     }),
 };
+
+export type CustomerOrder = {
+  _id: string;
+  orderNumber: string;
+  items: AdminOrderItem[];
+  totalAmount: number;
+  currency: string;
+  paymentStatus: PaymentStatus;
+  orderStatus: OrderStatus;
+  paymentMethod?: PaymentMethod | null;
+  paymentReceiptSubmitted: boolean;
+  paymentReceiptSubmittedAt?: string | null;
+  paymentConfirmedAt?: string | null;
+  refundedAt?: string | null;
+  deliveredAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type CustomerOrderListResponse = {
+  success: boolean;
+  count: number;
+  orders: CustomerOrder[];
+};
+
+export const customerOrderService = {
+  getMyOrders: () => apiRequest<CustomerOrderListResponse>("/orders"),
+};

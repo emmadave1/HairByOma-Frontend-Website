@@ -349,6 +349,20 @@ function FooterLinks({
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const dashboardRoutes = [
+    "/account",
+    "/orders",
+    "/rewards",
+    "/referrals",
+    "/birthday-club",
+    "/wishlist",
+    "/annual-challenge",
+    "/addresses",
+    "/settings",
+    "/notifications",
+  ];
+  const isCustomerDashboard = dashboardRoutes.includes(pathname);
   const pending = useRouterState({
     select: (s) => s.status === "pending",
   });
@@ -398,7 +412,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <Chrome>{children}</Chrome>
+      {isCustomerDashboard ? children : <Chrome>{children}</Chrome>}
     </StoreProvider>
   );
 }
+
+
+

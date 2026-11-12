@@ -20,4 +20,9 @@ export const userService = {
       method: "PATCH",
       body: payload,
     }),
-};
+
+  deleteAccount: (currentPassword: string) =>
+    apiRequest<{ success: boolean; message: string }>("/users/me", {
+      method: "DELETE",
+      body: { currentPassword },
+    }),};

@@ -25,14 +25,19 @@ import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as HowToOrderRouteImport } from './routes/how-to-order'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PromotionsRouteImport } from './routes/promotions'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as AuthenticatedAddressesRouteImport } from './routes/_authenticated/addresses'
 import { Route as AuthenticatedAnnualChallengeRouteImport } from './routes/_authenticated/annual-challenge'
 import { Route as AuthenticatedBirthdayClubRouteImport } from './routes/_authenticated/birthday-club'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedOrderConfirmationRouteImport } from './routes/_authenticated/order-confirmation'
+import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
 import { Route as AuthenticatedReferralsRouteImport } from './routes/_authenticated/referrals'
 import { Route as AuthenticatedRewardsRouteImport } from './routes/_authenticated/rewards'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedWishlistRouteImport } from './routes/_authenticated/wishlist'
 import { Route as ShopIndexRouteImport } from './routes/shop.index'
 import { Route as ShopSlugRouteImport } from './routes/shop.$slug'
@@ -116,6 +121,11 @@ const PromotionsRoute = PromotionsRouteImport.update({
   path: '/promotions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReviewsRoute = ReviewsRouteImport.update({
   id: '/reviews',
   path: '/reviews',
@@ -124,6 +134,11 @@ const ReviewsRoute = ReviewsRouteImport.update({
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAddressesRoute = AuthenticatedAddressesRouteImport.update({
+  id: '/addresses',
+  path: '/addresses',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAnnualChallengeRoute =
@@ -143,12 +158,23 @@ const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOrderConfirmationRoute =
   AuthenticatedOrderConfirmationRouteImport.update({
     id: '/order-confirmation',
     path: '/order-confirmation',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOrdersRoute = AuthenticatedOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedReferralsRoute = AuthenticatedReferralsRouteImport.update({
   id: '/referrals',
   path: '/referrals',
@@ -157,6 +183,11 @@ const AuthenticatedReferralsRoute = AuthenticatedReferralsRouteImport.update({
 const AuthenticatedRewardsRoute = AuthenticatedRewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedWishlistRoute = AuthenticatedWishlistRouteImport.update({
@@ -191,14 +222,19 @@ export interface FileRoutesByFullPath {
   '/how-to-order': typeof HowToOrderRoute
   '/policies': typeof PoliciesRoute
   '/promotions': typeof PromotionsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/addresses': typeof AuthenticatedAddressesRoute
   '/annual-challenge': typeof AuthenticatedAnnualChallengeRoute
   '/birthday-club': typeof AuthenticatedBirthdayClubRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/order-confirmation': typeof AuthenticatedOrderConfirmationRoute
+  '/orders': typeof AuthenticatedOrdersRoute
   '/referrals': typeof AuthenticatedReferralsRoute
   '/rewards': typeof AuthenticatedRewardsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/wishlist': typeof AuthenticatedWishlistRoute
   '/shop/$slug': typeof ShopSlugRoute
   '/shop/': typeof ShopIndexRoute
@@ -219,14 +255,19 @@ export interface FileRoutesByTo {
   '/how-to-order': typeof HowToOrderRoute
   '/policies': typeof PoliciesRoute
   '/promotions': typeof PromotionsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/addresses': typeof AuthenticatedAddressesRoute
   '/annual-challenge': typeof AuthenticatedAnnualChallengeRoute
   '/birthday-club': typeof AuthenticatedBirthdayClubRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/order-confirmation': typeof AuthenticatedOrderConfirmationRoute
+  '/orders': typeof AuthenticatedOrdersRoute
   '/referrals': typeof AuthenticatedReferralsRoute
   '/rewards': typeof AuthenticatedRewardsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/wishlist': typeof AuthenticatedWishlistRoute
   '/shop/$slug': typeof ShopSlugRoute
   '/shop': typeof ShopIndexRoute
@@ -249,14 +290,19 @@ export interface FileRoutesById {
   '/how-to-order': typeof HowToOrderRoute
   '/policies': typeof PoliciesRoute
   '/promotions': typeof PromotionsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/reviews': typeof ReviewsRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/addresses': typeof AuthenticatedAddressesRoute
   '/_authenticated/annual-challenge': typeof AuthenticatedAnnualChallengeRoute
   '/_authenticated/birthday-club': typeof AuthenticatedBirthdayClubRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/order-confirmation': typeof AuthenticatedOrderConfirmationRoute
+  '/_authenticated/orders': typeof AuthenticatedOrdersRoute
   '/_authenticated/referrals': typeof AuthenticatedReferralsRoute
   '/_authenticated/rewards': typeof AuthenticatedRewardsRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/wishlist': typeof AuthenticatedWishlistRoute
   '/shop/$slug': typeof ShopSlugRoute
   '/shop/': typeof ShopIndexRoute
@@ -279,14 +325,19 @@ export interface FileRouteTypes {
     | '/how-to-order'
     | '/policies'
     | '/promotions'
+    | '/reset-password'
     | '/reviews'
     | '/account'
+    | '/addresses'
     | '/annual-challenge'
     | '/birthday-club'
     | '/checkout'
+    | '/notifications'
     | '/order-confirmation'
+    | '/orders'
     | '/referrals'
     | '/rewards'
+    | '/settings'
     | '/wishlist'
     | '/shop/$slug'
     | '/shop/'
@@ -307,14 +358,19 @@ export interface FileRouteTypes {
     | '/how-to-order'
     | '/policies'
     | '/promotions'
+    | '/reset-password'
     | '/reviews'
     | '/account'
+    | '/addresses'
     | '/annual-challenge'
     | '/birthday-club'
     | '/checkout'
+    | '/notifications'
     | '/order-confirmation'
+    | '/orders'
     | '/referrals'
     | '/rewards'
+    | '/settings'
     | '/wishlist'
     | '/shop/$slug'
     | '/shop'
@@ -336,14 +392,19 @@ export interface FileRouteTypes {
     | '/how-to-order'
     | '/policies'
     | '/promotions'
+    | '/reset-password'
     | '/reviews'
     | '/_authenticated/account'
+    | '/_authenticated/addresses'
     | '/_authenticated/annual-challenge'
     | '/_authenticated/birthday-club'
     | '/_authenticated/checkout'
+    | '/_authenticated/notifications'
     | '/_authenticated/order-confirmation'
+    | '/_authenticated/orders'
     | '/_authenticated/referrals'
     | '/_authenticated/rewards'
+    | '/_authenticated/settings'
     | '/_authenticated/wishlist'
     | '/shop/$slug'
     | '/shop/'
@@ -366,6 +427,7 @@ export interface RootRouteChildren {
   HowToOrderRoute: typeof HowToOrderRoute
   PoliciesRoute: typeof PoliciesRoute
   PromotionsRoute: typeof PromotionsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ReviewsRoute: typeof ReviewsRoute
   ShopSlugRoute: typeof ShopSlugRoute
   ShopIndexRoute: typeof ShopIndexRoute
@@ -485,6 +547,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PromotionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reviews': {
       id: '/reviews'
       path: '/reviews'
@@ -497,6 +566,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/addresses': {
+      id: '/_authenticated/addresses'
+      path: '/addresses'
+      fullPath: '/addresses'
+      preLoaderRoute: typeof AuthenticatedAddressesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/annual-challenge': {
@@ -520,11 +596,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCheckoutRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/order-confirmation': {
       id: '/_authenticated/order-confirmation'
       path: '/order-confirmation'
       fullPath: '/order-confirmation'
       preLoaderRoute: typeof AuthenticatedOrderConfirmationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/orders': {
+      id: '/_authenticated/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof AuthenticatedOrdersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/referrals': {
@@ -539,6 +629,13 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/rewards'
       preLoaderRoute: typeof AuthenticatedRewardsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/wishlist': {
@@ -567,23 +664,31 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedAddressesRoute: typeof AuthenticatedAddressesRoute
   AuthenticatedAnnualChallengeRoute: typeof AuthenticatedAnnualChallengeRoute
   AuthenticatedBirthdayClubRoute: typeof AuthenticatedBirthdayClubRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOrderConfirmationRoute: typeof AuthenticatedOrderConfirmationRoute
+  AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
   AuthenticatedReferralsRoute: typeof AuthenticatedReferralsRoute
   AuthenticatedRewardsRoute: typeof AuthenticatedRewardsRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedWishlistRoute: typeof AuthenticatedWishlistRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedAddressesRoute: AuthenticatedAddressesRoute,
   AuthenticatedAnnualChallengeRoute: AuthenticatedAnnualChallengeRoute,
   AuthenticatedBirthdayClubRoute: AuthenticatedBirthdayClubRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOrderConfirmationRoute: AuthenticatedOrderConfirmationRoute,
+  AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
   AuthenticatedReferralsRoute: AuthenticatedReferralsRoute,
   AuthenticatedRewardsRoute: AuthenticatedRewardsRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedWishlistRoute: AuthenticatedWishlistRoute,
 }
 
@@ -607,6 +712,7 @@ const rootRouteChildren: RootRouteChildren = {
   HowToOrderRoute: HowToOrderRoute,
   PoliciesRoute: PoliciesRoute,
   PromotionsRoute: PromotionsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ReviewsRoute: ReviewsRoute,
   ShopSlugRoute: ShopSlugRoute,
   ShopIndexRoute: ShopIndexRoute,

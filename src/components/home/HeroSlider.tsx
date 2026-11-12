@@ -243,7 +243,7 @@ export function HeroSlider() {
         </div>
 
         {/* Carousel controls */}
-        <div className="mt-5 flex w-fit max-w-full items-center gap-1.5">
+        <div className="mt-5 flex w-fit max-w-full items-center gap-1">
           <Button
             variant="ghost"
             size="icon"
@@ -286,7 +286,7 @@ export function HeroSlider() {
           </Button>
 
           {/* Automatic rotation control */}
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             className="shrink-0 text-background hover:bg-background/15 hover:text-background"
@@ -296,8 +296,8 @@ export function HeroSlider() {
             }
             aria-pressed={userPaused}
           >
-            {/* {userPaused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />} */}
-          </Button>
+            {userPaused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
+          </Button> */}
         </div>
       </div>
     </section>

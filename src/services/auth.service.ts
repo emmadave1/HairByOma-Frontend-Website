@@ -57,6 +57,26 @@ export const authService = {
 
   getCurrentUser: () => apiRequest<{ success: boolean; user: AppUser }>("/users/me"),
 
+  changePassword: (payload: { currentPassword: string; newPassword: string }) =>
+    apiRequest<{ success: boolean; message: string }>("/users/change-password", {
+      method: "PATCH",
+      body: payload,
+    }),
+
+  requestPasswordReset: (email: string) =>
+    apiRequest<{ success: boolean; message: string }>("/users/forgot-password", {
+      method: "POST",
+      auth: false,
+      body: { email },
+    }),
+
+  resetPassword: (payload: { token: string; newPassword: string }) =>
+    apiRequest<{ success: boolean; message: string }>("/users/reset-password", {
+      method: "PATCH",
+      auth: false,
+      body: payload,
+    }),
+
   logout: async () => {
     try {
       await apiRequest("/users/logout", {
@@ -67,3 +87,4 @@ export const authService = {
     }
   },
 };
+

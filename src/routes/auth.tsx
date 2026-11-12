@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+﻿import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, LockKeyhole, Loader2, MailCheck, ShieldCheck } from "lucide-react";
 
@@ -16,7 +16,7 @@ type AuthSearch = {
   ref?: string;
 };
 
-type AuthMode = "login" | "register" | "verify";
+type AuthMode = "login" | "register" | "verify" | "forgot";
 
 const safeNext = (value?: string) =>
   value?.startsWith("/") && !value.startsWith("//") ? value : "/account";
@@ -97,6 +97,34 @@ function AuthPage() {
       await navigate({ to: destination as never });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to sign in. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+    setSuccess("");
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!normalizedEmail) {
+      setError("Please enter your email address.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await authService.requestPasswordReset(normalizedEmail);
+      setSuccess(response.message);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to send your password reset link. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -248,7 +276,46 @@ function AuthPage() {
           </div>
         )}
 
-        {mode === "verify" ? (
+        {mode === "forgot" ? (
+          <form onSubmit={handleForgotPassword} className="mt-8 space-y-5">
+            <div className="space-y-2 text-center">
+              <h2 className="text-xl font-semibold">Forgot your password?</h2>
+              <p className="text-sm text-muted-foreground">
+                Enter the email address linked to your account. We'll send you a
+                password reset link.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="forgot-email">Email Address</Label>
+              <Input
+                id="forgot-email"
+                type="email"
+                placeholder="you@example.com"
+                autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <Button type="submit" size="lg" className="w-full" disabled={loading}>
+              {loading && <Loader2 className="animate-spin" />}
+              Send Reset Link
+            </Button>
+
+            <button
+              type="button"
+              onClick={() => changeMode("login")}
+              className="flex w-full items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+              disabled={loading}
+            >
+              <ArrowLeft className="size-4" />
+              Back to Sign In
+            </button>
+          </form>
+        ) : mode === "verify" ? (
           <form onSubmit={handleVerify} className="mt-8 space-y-6">
             <div className="space-y-3">
               <Label className="block text-center">Verification Code</Label>
@@ -350,6 +417,16 @@ function AuthPage() {
                     required
                     disabled={loading}
                   />
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => changeMode("forgot")}
+                    className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+                  >
+                    Forgot Password?
+                  </button>
                 </div>
 
                 <Button type="submit" size="lg" className="w-full" disabled={loading}>
@@ -496,3 +573,5 @@ function AuthPage() {
     </div>
   );
 }
+
+
