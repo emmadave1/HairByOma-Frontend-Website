@@ -11,7 +11,7 @@ export type AdminOrderItem = {
   product: string;
   productName: string;
   variantId?: string | null;
-  length?: string | null;
+  length?: number | null;
   texture?: string | null;
   quantity: number;
   unitPrice: number;
@@ -136,22 +136,81 @@ export const adminOrderService = {
     }),
 };
 
+export type OrderPaymentSnapshot = {
+  bankName: string | null;
+  accountName: string | null;
+  accountNumber: string | null;
+  whatsappNumber: string | null;
+  capturedAt: string | null;
+};
+
 export type CustomerOrder = {
   _id: string;
   orderNumber: string;
   items: AdminOrderItem[];
-  totalAmount: number;
+
+  deliveryAddress: string;
+  deliveryFullName: string;
+  deliveryAdditionalInfo?: string;
+  deliveryPhone: string;
+  deliveryCity: string;
+  deliveryState: string;
+  deliveryFee: number;
+
+  loyaltyPointsRedeemed?: number;
+  loyaltyDiscount?: number;
+  referralDiscount?: number;
+  referralDiscountType?: "WELCOME" | "REFERRER_REWARD" | null;
+  couponCode?: string | null;
+  couponDiscount?: number;
+
   currency: string;
+  totalAmount: number;
+
+  paymentSnapshot?: OrderPaymentSnapshot | null;
   paymentStatus: PaymentStatus;
-  orderStatus: OrderStatus;
-  paymentMethod?: PaymentMethod | null;
+  paymentReference?: string | null;
   paymentReceiptSubmitted: boolean;
   paymentReceiptSubmittedAt?: string | null;
   paymentConfirmedAt?: string | null;
+  paymentNote?: string | null;
+  paymentMethod?: PaymentMethod | null;
+
+  refundNote?: string | null;
   refundedAt?: string | null;
+
+  orderStatus: OrderStatus;
+  statusHistory: OrderStatusHistory[];
   deliveredAt?: string | null;
+
   createdAt: string;
   updatedAt: string;
+};
+
+export type CreateOrderPayload = {
+  addressId: string;
+  loyaltyPointsToRedeem?: number;
+  couponCode?: string;
+};
+
+export type CreateOrderResponse = {
+  success: boolean;
+  message: string;
+  order: CustomerOrder;
+  paymentInstructions: {
+    bankName: string | null;
+    accountName: string | null;
+    accountNumber: string | null;
+    amount: number;
+    currency: string;
+  };
+  whatsappLink: string;
+  idempotentReplay?: boolean;
+};
+
+type CustomerOrderResponse = {
+  success: boolean;
+  order: CustomerOrder;
 };
 
 type CustomerOrderListResponse = {
@@ -160,6 +219,28 @@ type CustomerOrderListResponse = {
   orders: CustomerOrder[];
 };
 
+type CustomerOrderActionResponse = {
+  success: boolean;
+  message: string;
+  order: CustomerOrder;
+};
+
 export const customerOrderService = {
-  getMyOrders: () => apiRequest<CustomerOrderListResponse>("/orders"),
+  getMyOrders: () =>
+    apiRequest<CustomerOrderListResponse>("/orders"),
+
+  getMyOrderById: (id: string) =>
+    apiRequest<CustomerOrderResponse>(`/orders/${id}`),
+
+  createOrder: (payload: CreateOrderPayload, idempotencyKey: string) =>
+    apiRequest<CreateOrderResponse>("/orders", {
+      method: "POST",
+      headers: { "Idempotency-Key": idempotencyKey },
+      body: payload,
+    }),
+
+  submitPaymentReceipt: (id: string) =>
+    apiRequest<CustomerOrderActionResponse>(`/orders/${id}/payment/receipt`, {
+      method: "PATCH",
+    }),
 };

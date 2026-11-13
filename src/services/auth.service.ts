@@ -1,4 +1,4 @@
-﻿import { apiRequest, tokenStorage } from "@/lib/api";
+import { apiRequest } from "@/lib/api";
 import type { AppUser, AuthResponse, RegisterResponse } from "@/types";
 
 export type RegisterPayload = {
@@ -43,19 +43,15 @@ export const authService = {
       body: { email },
     }),
 
-  login: async (payload: LoginPayload) => {
-    const response = await apiRequest<AuthResponse>("/users/login", {
+  login: (payload: LoginPayload) =>
+    apiRequest<AuthResponse>("/users/login", {
       method: "POST",
       auth: false,
       body: payload,
-    });
+    }),
 
-    tokenStorage.set(response.token);
-
-    return response;
-  },
-
-  getCurrentUser: () => apiRequest<{ success: boolean; user: AppUser }>("/users/me"),
+  getCurrentUser: () =>
+    apiRequest<{ success: boolean; user: AppUser }>("/users/me"),
 
   changePassword: (payload: { currentPassword: string; newPassword: string }) =>
     apiRequest<{ success: boolean; message: string }>("/users/change-password", {
@@ -77,14 +73,8 @@ export const authService = {
       body: payload,
     }),
 
-  logout: async () => {
-    try {
-      await apiRequest("/users/logout", {
-        method: "POST",
-      });
-    } finally {
-      tokenStorage.clear();
-    }
-  },
+  logout: () =>
+    apiRequest("/users/logout", {
+      method: "POST",
+    }),
 };
-

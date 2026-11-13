@@ -279,7 +279,7 @@ function Footer() {
       <div className="border-t border-background/10">
         <div className="site-container flex flex-wrap justify-between gap-3 py-5 text-xs text-background/60">
           <span>© 2026 HairbyOma.</span>
-          <Link to="/admin">Admin UI preview</Link>
+          {/* <Link to="/admin">Admin UI preview</Link> */}
         </div>
       </div>
     </footer>

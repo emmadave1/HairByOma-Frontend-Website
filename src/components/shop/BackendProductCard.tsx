@@ -12,12 +12,8 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-export function BackendProductCard({
-  product,
-}: {
-  product: BackendProduct;
-}) {
-  const { toggleWishlist, wishlist } = useStore();
+export function BackendProductCard({ product }: { product: BackendProduct }) {
+  const { toggleWishlist, wishlist, addToCart } = useStore();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -36,14 +32,12 @@ export function BackendProductCard({
     ? product.variants.reduce((total, variant) => total + variant.stock, 0)
     : product.stock;
 
-  const lengths = product.variants
-    .map((variant) => variant.length)
-    .sort((a, b) => a - b);
+  const lengths = product.variants.map((variant) => variant.length).sort((a, b) => a - b);
 
   const priceLabel =
     lowestPrice === highestPrice
       ? `₦${lowestPrice.toLocaleString()}`
-      : `₦${lowestPrice.toLocaleString()} - ?${highestPrice.toLocaleString()}`;
+      : `₦${lowestPrice.toLocaleString()} - ₦${highestPrice.toLocaleString()}`;
 
   function save() {
     if (!user) {
@@ -52,6 +46,17 @@ export function BackendProductCard({
     }
 
     toggleWishlist(product._id);
+  }
+
+  async function handleAddToCart() {
+    try {
+      await addToCart({
+        productId: product._id,
+        quantity: 1,
+      });
+    } catch (error) {
+      console.error("Unable to add product to cart:", error);
+    }
   }
 
   function viewProduct() {
@@ -135,28 +140,22 @@ export function BackendProductCard({
           <div>
             <p className="font-semibold">{priceLabel}</p>
             <p className="text-[11px] text-muted-foreground">
-              {availableStock > 0
-                ? `₦${availableStock} in stock`
-                : "Out of stock"}
+              {availableStock > 0 ? `${availableStock} in stock` : "Out of stock"}
             </p>
           </div>
 
           <Button
             size="icon"
             variant="outline"
-            onClick={viewProduct}
+            onClick={handleAddToCart}
             disabled={availableStock <= 0}
-            aria-label={`View ₦${product.name} options`}
+            aria-label={`Add ₦${product.name} to cart`}
           >
             <ShoppingCart />
           </Button>
         </div>
 
-        <Button
-          variant="outline"
-          className="mt-3 w-full"
-          onClick={viewProduct}
-        >
+        <Button variant="outline" className="mt-3 w-full" onClick={viewProduct}>
           View product
         </Button>
       </div>

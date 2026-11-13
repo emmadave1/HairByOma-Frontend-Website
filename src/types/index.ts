@@ -1,4 +1,4 @@
-﻿export type Product = {
+export type Product = {
   id: string;
   slug: string;
   name: string;
@@ -58,7 +58,6 @@ export type AppUser = {
 export type AuthResponse = {
   success: boolean;
   message: string;
-  token: string;
   user: AppUser;
 };
 

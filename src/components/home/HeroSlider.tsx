@@ -13,9 +13,9 @@ import {
 import { Button } from "@/components/ui/button";
 
 import hero from "@/assets/hairbyoma-hero.jpg";
-import deep from "@/assets/deep-wave.jpg";
-import bob from "@/assets/bob-wig.jpg";
-import bounce from "@/assets/layered-bounce.jpg";
+import deep from "@/assets/brand-amb1.jpg";
+import bob from "@/assets/brand-amb2.jpg";
+import bounce from "@/assets/brand-amb3.jpg";
 import wave from "@/assets/water-wave.jpg";
 import ponytail from "@/assets/sleek-ponytail.jpg";
 

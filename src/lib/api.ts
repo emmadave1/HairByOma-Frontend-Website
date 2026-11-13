@@ -1,6 +1,4 @@
-﻿const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "");
-
-const TOKEN_KEY = "hairbyoma_token";
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "");
 
 type ApiOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
@@ -12,25 +10,6 @@ type ApiError = Error & {
   data: unknown;
 };
 
-export const tokenStorage = {
-  get: () =>
-    typeof window !== "undefined"
-      ? window.localStorage.getItem(TOKEN_KEY)
-      : null,
-
-  set: (token: string) => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem(TOKEN_KEY, token);
-    }
-  },
-
-  clear: () => {
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem(TOKEN_KEY);
-    }
-  },
-};
-
 export async function apiRequest<T>(
   endpoint: string,
   options: ApiOptions = {},
@@ -39,7 +18,7 @@ export async function apiRequest<T>(
     throw new Error("API URL is not configured.");
   }
 
-  const { body, auth = true, headers, ...requestOptions } = options;
+  const { body, auth: _auth = true, headers, ...requestOptions } = options;
 
   const requestHeaders = new Headers(headers);
 
@@ -47,18 +26,11 @@ export async function apiRequest<T>(
     requestHeaders.set("Content-Type", "application/json");
   }
 
-  if (auth) {
-    const token = tokenStorage.get();
-
-    if (token) {
-      requestHeaders.set("Authorization", `Bearer ${token}`);
-    }
-  }
-
   const response = await fetch(
     `${API_BASE_URL}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`,
     {
       ...requestOptions,
+      credentials: "include",
       headers: requestHeaders,
       ...(body === undefined
         ? {}

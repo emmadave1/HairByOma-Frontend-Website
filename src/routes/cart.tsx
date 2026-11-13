@@ -203,7 +203,7 @@ function Page() {
                     </div>
 
                     <strong>
-                      ?<AnimatedNumber value={item.subtotal} />
+                      ₦<AnimatedNumber value={item.subtotal} />
                     </strong>
                   </div>
                 </div>
@@ -222,7 +222,7 @@ function Page() {
           <div className="mt-4 flex justify-between border-t pt-4 text-lg">
             <strong>Total</strong>
             <strong>
-              ?<AnimatedNumber value={total} />
+              ₦<AnimatedNumber value={total} />
             </strong>
           </div>
 
@@ -251,7 +251,7 @@ function Summary({ label, value }: { label: string; value: number }) {
     <div className="mt-4 flex justify-between text-sm text-muted-foreground">
       <span>{label}</span>
       <span>
-        ?<AnimatedNumber value={value} />
+        ₦<AnimatedNumber value={value} />
       </span>
     </div>
   );

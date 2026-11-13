@@ -1,4 +1,4 @@
-﻿import {
+import {
   createContext,
   useCallback,
   useContext,
@@ -8,7 +8,6 @@
   type ReactNode,
 } from "react";
 import { authService } from "@/services/auth.service";
-import { tokenStorage } from "@/lib/api";
 import type { AppUser } from "@/types";
 
 type AuthState = {
@@ -26,12 +25,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
-    if (!tokenStorage.get()) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
-
     try {
       const response = await authService.getCurrentUser();
       setUser(response.user);
@@ -44,7 +37,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           : undefined;
 
       if (status === 401 || status === 403) {
-        tokenStorage.clear();
         setUser(null);
       }
     } finally {

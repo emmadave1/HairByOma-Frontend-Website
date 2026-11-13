@@ -1,10 +1,11 @@
 import {
   createFileRoute,
   Outlet,
-  redirect,
+  useNavigate,
   useRouterState,
 } from "@tanstack/react-router";
-import { tokenStorage } from "@/lib/api";
+import { useEffect } from "react";
+import { useAuth } from "@/context/auth";
 import { CustomerDashboardLayout } from "@/components/layout/CustomerDashboardLayout";
 
 const dashboardRoutes = [
@@ -21,9 +22,37 @@ const dashboardRoutes = [
 ];
 
 function AuthenticatedLayout() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
+
+  const currentHref = useRouterState({
+    select: (state) => state.location.href,
+  });
+
+  useEffect(() => {
+    if (!loading && !user) {
+      void navigate({
+        to: "/auth",
+        search: {
+          next: currentHref,
+        },
+      });
+    }
+  }, [loading, user, currentHref, navigate]);
+
+  if (loading || !user) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <p className="text-sm text-muted-foreground">
+          Checking your session...
+        </p>
+      </div>
+    );
+  }
 
   const isDashboardRoute = dashboardRoutes.includes(pathname);
 
@@ -38,19 +67,5 @@ function AuthenticatedLayout() {
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
-
-  beforeLoad: ({ location }) => {
-    if (!tokenStorage.get()) {
-      throw redirect({
-        to: "/auth",
-        search: {
-          next: location.href,
-        },
-      });
-    }
-  },
-
   component: AuthenticatedLayout,
 });
-
-
