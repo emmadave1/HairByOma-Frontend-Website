@@ -190,12 +190,7 @@ function Page() {
                         size="icon"
                         variant="ghost"
                         onClick={() => void handleQuantity(item.itemId, item.quantity + 1)}
-                        disabled={
-                          busyItem === item.itemId ||
-                          !item.available ||
-                          (item.availableStock !== undefined &&
-                            item.quantity >= item.availableStock)
-                        }
+                        disabled={busyItem === item.itemId || !item.available}
                         aria-label="Increase quantity"
                       >
                         <Plus />

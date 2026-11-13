@@ -23,7 +23,30 @@ export type AvailableCouponsResponse = {
   coupons: AvailableCoupon[];
 };
 
+export type CouponValidation = {
+  id: string;
+  code: string;
+  description: string;
+  discountType: "PERCENTAGE" | "FIXED";
+  discountValue: number;
+  discountAmount: number;
+  minimumOrderAmount: number;
+  productSubtotal: number;
+  discountedSubtotal: number;
+};
+
+export type CouponValidationResponse = {
+  success: boolean;
+  message: string;
+  coupon: CouponValidation;
+};
+
 export const couponService = {
-  available: () =>
-    apiRequest<AvailableCouponsResponse>("/coupons/available"),
+  available: () => apiRequest<AvailableCouponsResponse>("/coupons/available"),
+
+  validate: (couponCode: string, loyaltyPointsToRedeem = 0) =>
+    apiRequest<CouponValidationResponse>("/coupons/validate", {
+      method: "POST",
+      body: { couponCode, loyaltyPointsToRedeem },
+    }),
 };

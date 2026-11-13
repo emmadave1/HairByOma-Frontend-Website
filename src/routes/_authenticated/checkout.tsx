@@ -21,6 +21,7 @@ import { useStore } from "@/context/store";
 import { addressService, type AddressPayload, type SavedAddress } from "@/services/address.service";
 import { storeSettingsService, type StorefrontSettings } from "@/services/store-settings.service";
 import { customerOrderService } from "@/services/order.service";
+import { couponService, type CouponValidation } from "@/services/coupon.service";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
   head: () => ({
@@ -64,6 +65,9 @@ function Page() {
   const [settingsError, setSettingsError] = useState("");
   const [orderError, setOrderError] = useState("");
   const [loyaltyPointsToRedeem] = useState(0);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<CouponValidation | null>(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   const orderKeyRef = useRef<string | null>(null);
   const { cart, cartTotal, loadingCart, cartError, refreshCart } = useStore();
@@ -129,7 +133,11 @@ function Page() {
   );
 
   const currency = settings?.delivery.currency || "NGN";
-  const unavailableItems = cart.filter((item) => !item.available);
+
+  const unavailableItems = cart.filter(
+    (item) =>
+      !item.available || (item.availableStock !== undefined && item.quantity > item.availableStock),
+  );
 
   async function handleAddAddress(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -188,6 +196,34 @@ function Page() {
     }
   }
 
+  async function handleApplyCoupon() {
+    const code = couponCode.trim().toUpperCase();
+
+    if (!code) {
+      toast.error("Please enter a coupon code.");
+      return;
+    }
+
+    if (applyingCoupon) return;
+
+    setApplyingCoupon(true);
+
+    try {
+      const response = await couponService.validate(code, loyaltyPointsToRedeem);
+
+      setAppliedCoupon(response.coupon);
+      setCouponCode(response.coupon.code);
+
+      toast.success(response.message || "Coupon applied successfully.");
+    } catch (error) {
+      setAppliedCoupon(null);
+
+      toast.error(error instanceof Error ? error.message : "Unable to validate this coupon.");
+    } finally {
+      setApplyingCoupon(false);
+    }
+  }
+
   function updateAddressForm(field: keyof AddressPayload, value: string | boolean) {
     setAddressForm((current) => ({
       ...current,
@@ -241,6 +277,7 @@ function Page() {
         {
           addressId: selectedAddress._id,
           loyaltyPointsToRedeem,
+          ...(appliedCoupon ? { couponCode: appliedCoupon.code } : {}),
         },
         orderKeyRef.current,
       );
@@ -593,9 +630,16 @@ function Page() {
                               <p className="mt-1 text-xs text-muted-foreground">
                                 Quantity: {item.quantity}
                               </p>
-                              {!item.available && (
+                              {(!item.available ||
+                                (item.availableStock !== undefined &&
+                                  item.quantity > item.availableStock)) && (
                                 <p className="mt-1 text-xs text-destructive">
-                                  {item.message || "This item is unavailable."}
+                                  {item.availableStock === 0
+                                    ? "This item is currently out of stock."
+                                    : item.availableStock !== undefined &&
+                                        item.quantity > item.availableStock
+                                      ? `Only ${item.availableStock} unit(s) are currently available, but you have ${item.quantity} in your cart.`
+                                      : item.message || "This item is unavailable."}
                                 </p>
                               )}
                             </div>
@@ -605,6 +649,62 @@ function Page() {
                           </span>
                         </div>
                       ))}
+                    </div>
+                    <div className="mt-7 border p-4">
+                      <h3 className="font-semibold">Have a discount code?</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Enter your coupon code to enjoy a discount on your order.
+                      </p>
+
+                      {appliedCoupon ? (
+                        <div className="mt-4 flex items-center justify-between gap-3">
+                          <div>
+                            <p className="font-medium text-green-700">
+                              {appliedCoupon.code} applied
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              You saved {formatMoney(appliedCoupon.discountAmount, currency)}.
+                            </p>
+                          </div>
+
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setAppliedCoupon(null);
+                              setCouponCode("");
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                          <Input
+                            value={couponCode}
+                            onChange={(event) => setCouponCode(event.target.value.toUpperCase())}
+                            placeholder="Enter coupon code"
+                            disabled={applyingCoupon}
+                          />
+
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleApplyCoupon}
+                            disabled={applyingCoupon || !couponCode.trim()}
+                          >
+                            {applyingCoupon ? (
+                              <>
+                                <Loader2 className="size-4 animate-spin" />
+                                Applying...
+                              </>
+                            ) : (
+                              "Apply"
+                            )}
+                          </Button>
+                        </div>
+                      )}
                     </div>
 
                     {unavailableItems.length > 0 && (
@@ -738,6 +838,15 @@ function Page() {
                   <span>{formatMoney(cartTotal, currency)}</span>
                 </div>
 
+                {appliedCoupon && (
+                  <div className="mt-3 flex justify-between gap-3 text-sm">
+                    <span className="text-green-700">Coupon discount ({appliedCoupon.code})</span>
+                    <span className="font-medium text-green-700">
+                      -{formatMoney(Math.min(appliedCoupon.discountAmount, cartTotal), currency)}
+                    </span>
+                  </div>
+                )}
+
                 <div className="mt-3 flex justify-between text-sm">
                   <span className="text-muted-foreground">Delivery</span>
                   <span>
@@ -751,14 +860,18 @@ function Page() {
                   <span className="font-semibold">Total</span>
                   <span className="text-right text-xl font-bold">
                     {selectedCity
-                      ? formatMoney(cartTotal + selectedCity.deliveryFee, currency)
+                      ? formatMoney(
+                          cartTotal -
+                            Math.min(appliedCoupon?.discountAmount || 0, cartTotal) +
+                            selectedCity.deliveryFee,
+                          currency,
+                        )
                       : "Calculated by store"}
                   </span>
                 </div>
 
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Your final order total includes the items and applicable delivery fee. Any
-                  applicable discounts will be reflected when your order is created.
+                  Your coupon discount applies to your products, not the delivery fee.
                 </p>
 
                 <div className="mt-6 flex items-start gap-2 border-t pt-5 text-xs leading-5 text-muted-foreground">

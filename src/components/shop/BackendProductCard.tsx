@@ -1,6 +1,7 @@
 import { Heart, ImageOff, ShoppingCart, Star } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { useStore } from "@/context/store";
 import { useAuth } from "@/context/auth";
 import type { BackendProduct } from "@/services/product.service";
@@ -49,13 +50,35 @@ export function BackendProductCard({ product }: { product: BackendProduct }) {
   }
 
   async function handleAddToCart() {
+    if (availableStock <= 0) {
+      toast.error("Sorry, this product is currently out of stock.");
+      return;
+    }
+
+    if (product.variants.length > 0) {
+      toast.info("Please select your preferred product options first.");
+
+      navigate({
+        to: "/shop/$slug",
+        params: { slug },
+      });
+
+      return;
+    }
+
     try {
       await addToCart({
         productId: product._id,
         quantity: 1,
       });
+
+      toast.success(`${product.name} added to your cart!`);
     } catch (error) {
-      console.error("Unable to add product to cart:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Unable to add this product to your cart. Please try again.",
+      );
     }
   }
 
